@@ -53,7 +53,11 @@
                             "EnvironmentVariables": "[{\"name\":\"AWS_DEFAULT_REGION\",\"value\":\"us-east-1\",\"type\":\"PLAINTEXT\"},{\"name\":\"IMAGE_REPO_NAME\",\"value\":\"sample-html-codebuild\",\"type\":\"PLAINTEXT\"},{\"name\":\"IMAGE_TAG\",\"value\":\"latest\",\"type\":\"PLAINTEXT\"},{\"name\":\"AWS_ACCOUNT_ID\",\"value\":\"912910966231\",\"type\":\"PLAINTEXT\"},{\"name\":\"TARGET_ACCOUNT\",\"value\":\"377830127496\",\"type\":\"PLAINTEXT\"}]",
                             "ProjectName": "priviledged-dockerfile-replicate-to-crossaccount-ecr"
                         },
-                        "outputArtifacts": [],
+                        "outputArtifacts": [
+                            {
+                                "name": "build-output"
+                            }
+                        ],
                         "inputArtifacts": [
                             {
                                 "name": "SourceArtifact"
@@ -65,19 +69,55 @@
             },
             {
                 "name": "Deploy",
-                "actions":[
+                "actions": [
                     {
-                        "name":"deploy-ecs",
-                        "actionTypeId":""
+                        "name": "Deploy",
+                        "actionTypeId": {
+                            "category": "Deploy",
+                            "owner": "AWS",
+                            "provider": "ECS",
+                            "version": "1"
+                        },
+                        "runOrder": 1,
+                        "configuration": {
+                            "ClusterName": "testCapacityProvider",
+                            "FileName": "imagedefinitions.json",
+                            "ServiceName": "codepipeline-ci-service"
+                        },
+                        "outputArtifacts": [],
+                        "inputArtifacts": [
+                            {
+                                "name": "build-output"
+                            }
+                        ],
+                        "region": "us-east-1"
+                    },
+                    {
+                        "name": "Deploy-target",
+                        "actionTypeId": {
+                            "category": "Deploy",
+                            "owner": "AWS",
+                            "provider": "ECS",
+                            "version": "1"
+                        },
+                        "runOrder": 2,
+                        "roleArn":"arn:aws:iam::377830127496:role/DanishAdmin",
+                        "configuration": {
+                            "ClusterName": "testCapacityProvider",
+                            "FileName": "imagedefinitions.json",
+                            "ServiceName": "codepipeline-ci-service"
+                        },
+                        "outputArtifacts": [],
+                        "inputArtifacts": [
+                            {
+                                "name": "build-output"
+                            }
+                        ],
+                        "region": "us-east-1"
                     }
                 ]
             }
         ],
-        "version": 4
-    },
-    "metadata": {
-        "pipelineArn": "arn:aws:codepipeline:us-east-1:912910966231:cross-account-ecr-replicate-deploy-ecs",
-        "created": 1583125665.769,
-        "updated": 1583131232.434
+        "version": 12
     }
 }
