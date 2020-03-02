@@ -1,0 +1,6 @@
+[
+    {
+        "name": "sample-http",
+        "imageUri": "912910966231.dkr.ecr.us-east-1.amazonaws.com/sample-html-codebuild:latest"
+    }
+]
