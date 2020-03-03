@@ -83,7 +83,6 @@
               "provider": "ECS",
               "version": "1"
             },
-            "runOrder": 1,
             "roleArn": "arn:aws:iam::377830127496:role/DanishAdmin",
             "configuration": {
               "ClusterName": "CustomerReplication",
@@ -106,7 +105,6 @@
               "provider": "ECS",
               "version": "1"
             },
-            "runOrder": 2,
             "configuration": {
               "ClusterName": "testCapacityProvider",
               "FileName": "imagedefinitions.json",
