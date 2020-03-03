@@ -1,10 +1,14 @@
 {
   "pipeline": {
-    "name": "cross-account-ecr-replicate-deploy-ecs",
-    "roleArn": "arn:aws:iam::912910966231:role/service-role/AWSCodePipelineServiceRole-us-east-1-cross-account-ecr-replicat",
+    "name": "test-cross-almas",
+    "roleArn": "arn:aws:iam::912910966231:role/service-role/AWSCodePipelineServiceRole-us-east-1-test-cross-almas",
     "artifactStore": {
       "type": "S3",
-      "location": "codepipeline-us-east-1-202409166384"
+      "location": "codepipeline-us-east-1-202409166384",
+      "encryptionKey": {
+        "id": "arn:aws:kms:us-east-1:912910966231:alias/CP_Key",
+        "type": "KMS"
+      }
     },
     "stages": [
       {
@@ -41,7 +45,7 @@
         "name": "Build",
         "actions": [
           {
-            "name": "build-priviledged",
+            "name": "Build",
             "actionTypeId": {
               "category": "Build",
               "owner": "AWS",
@@ -50,12 +54,12 @@
             },
             "runOrder": 1,
             "configuration": {
-              "EnvironmentVariables": "[{\"name\":\"AWS_DEFAULT_REGION\",\"value\":\"us-east-1\",\"type\":\"PLAINTEXT\"},{\"name\":\"IMAGE_REPO_NAME\",\"value\":\"sample-html-codebuild\",\"type\":\"PLAINTEXT\"},{\"name\":\"IMAGE_TAG\",\"value\":\"newone\",\"type\":\"PLAINTEXT\"},{\"name\":\"AWS_ACCOUNT_ID\",\"value\":\"912910966231\",\"type\":\"PLAINTEXT\"},{\"name\":\"TARGET_ACCOUNT\",\"value\":\"377830127496\",\"type\":\"PLAINTEXT\"}]",
-              "ProjectName": "priviledged-dockerfile-replicate-to-crossaccount-ecr"
+              "EnvironmentVariables": "[{\"name\":\"AWS_DEFAULT_REGION\",\"value\":\"us-east-1\",\"type\":\"PLAINTEXT\"},{\"name\":\"AWS_ACCOUNT_ID\",\"value\":\"912910966231\",\"type\":\"PLAINTEXT\"},{\"name\":\"IMAGE_TAG\",\"value\":\"priv2danalmas\",\"type\":\"PLAINTEXT\"},{\"name\":\"TARGET_ACCOUNT\",\"value\":\"377830127496\",\"type\":\"PLAINTEXT\"},{\"name\":\"IMAGE_REPO_NAME\",\"value\":\"sample-html-codebuild\",\"type\":\"PLAINTEXT\"}]",
+              "ProjectName": "priv-2-dan-almas"
             },
             "outputArtifacts": [
               {
-                "name": "build-output"
+                "name": "BuildArtifact"
               }
             ],
             "inputArtifacts": [
@@ -63,7 +67,8 @@
                 "name": "SourceArtifact"
               }
             ],
-            "region": "us-east-1"
+            "region": "us-east-1",
+            "namespace": "BuildVariables"
           }
         ]
       },
@@ -88,7 +93,7 @@
             "outputArtifacts": [],
             "inputArtifacts": [
               {
-                "name": "build-output"
+                "name": "BuildArtifact"
               }
             ],
             "region": "us-east-1"
@@ -110,7 +115,7 @@
             "outputArtifacts": [],
             "inputArtifacts": [
               {
-                "name": "build-output"
+                "name": "BuildArtifact"
               }
             ],
             "region": "us-east-1"
@@ -118,6 +123,6 @@
         ]
       }
     ],
-    "version": 15
+    "version": 1
   }
 }
